@@ -9,21 +9,29 @@
 /* Begin PBXBuildFile section */
 		E31F823526DA875100CF3698 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F823426DA875100CF3698 /* AppDelegate.swift */; };
 		E31F823726DA875100CF3698 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F823626DA875100CF3698 /* SceneDelegate.swift */; };
-		E31F823926DA875100CF3698 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F823826DA875100CF3698 /* ViewController.swift */; };
+		E31F823926DA875100CF3698 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F823826DA875100CF3698 /* MainViewController.swift */; };
 		E31F823C26DA875100CF3698 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E31F823A26DA875100CF3698 /* Main.storyboard */; };
 		E31F823E26DA875600CF3698 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E31F823D26DA875600CF3698 /* Assets.xcassets */; };
 		E31F824126DA875600CF3698 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E31F823F26DA875600CF3698 /* LaunchScreen.storyboard */; };
+		E31F824D26DA888400CF3698 /* StepModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F824C26DA888400CF3698 /* StepModel.swift */; };
+		E31F824F26DA89EF00CF3698 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F824E26DA89EF00CF3698 /* PlayerViewController.swift */; };
+		E31F825126DA90DD00CF3698 /* ExcursionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F825026DA90DD00CF3698 /* ExcursionModel.swift */; };
+		E31F825326DA988800CF3698 /* Tokio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E31F825226DA988800CF3698 /* Tokio.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E31F823126DA875100CF3698 /* WeGoTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeGoTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E31F823426DA875100CF3698 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E31F823626DA875100CF3698 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E31F823826DA875100CF3698 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E31F823826DA875100CF3698 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		E31F823B26DA875100CF3698 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E31F823D26DA875600CF3698 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E31F824026DA875600CF3698 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E31F824226DA875600CF3698 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E31F824C26DA888400CF3698 /* StepModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepModel.swift; sourceTree = "<group>"; };
+		E31F824E26DA89EF00CF3698 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		E31F825026DA90DD00CF3698 /* ExcursionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcursionModel.swift; sourceTree = "<group>"; };
+		E31F825226DA988800CF3698 /* Tokio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tokio.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +64,59 @@
 		E31F823326DA875100CF3698 /* WeGoTrip */ = {
 			isa = PBXGroup;
 			children = (
-				E31F823426DA875100CF3698 /* AppDelegate.swift */,
-				E31F823626DA875100CF3698 /* SceneDelegate.swift */,
-				E31F823826DA875100CF3698 /* ViewController.swift */,
-				E31F823A26DA875100CF3698 /* Main.storyboard */,
+				E31F824826DA882B00CF3698 /* System */,
+				E31F824A26DA884C00CF3698 /* Controllers */,
+				E31F824B26DA885B00CF3698 /* Models */,
+				E31F824926DA883A00CF3698 /* View */,
+				E389932E26DAA2B70041610D /* Sound */,
+				E31F825226DA988800CF3698 /* Tokio.mp3 */,
 				E31F823D26DA875600CF3698 /* Assets.xcassets */,
-				E31F823F26DA875600CF3698 /* LaunchScreen.storyboard */,
 				E31F824226DA875600CF3698 /* Info.plist */,
 			);
 			path = WeGoTrip;
+			sourceTree = "<group>";
+		};
+		E31F824826DA882B00CF3698 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				E31F823426DA875100CF3698 /* AppDelegate.swift */,
+				E31F823626DA875100CF3698 /* SceneDelegate.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		E31F824926DA883A00CF3698 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E31F823A26DA875100CF3698 /* Main.storyboard */,
+				E31F823F26DA875600CF3698 /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E31F824A26DA884C00CF3698 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E31F823826DA875100CF3698 /* MainViewController.swift */,
+				E31F824E26DA89EF00CF3698 /* PlayerViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		E31F824B26DA885B00CF3698 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E31F824C26DA888400CF3698 /* StepModel.swift */,
+				E31F825026DA90DD00CF3698 /* ExcursionModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E389932E26DAA2B70041610D /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sound;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E31F824126DA875600CF3698 /* LaunchScreen.storyboard in Resources */,
+				E31F825326DA988800CF3698 /* Tokio.mp3 in Resources */,
 				E31F823E26DA875600CF3698 /* Assets.xcassets in Resources */,
 				E31F823C26DA875100CF3698 /* Main.storyboard in Resources */,
 			);
@@ -137,9 +190,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E31F823926DA875100CF3698 /* ViewController.swift in Sources */,
+				E31F823926DA875100CF3698 /* MainViewController.swift in Sources */,
 				E31F823526DA875100CF3698 /* AppDelegate.swift in Sources */,
+				E31F825126DA90DD00CF3698 /* ExcursionModel.swift in Sources */,
 				E31F823726DA875100CF3698 /* SceneDelegate.swift in Sources */,
+				E31F824D26DA888400CF3698 /* StepModel.swift in Sources */,
+				E31F824F26DA89EF00CF3698 /* PlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,13 +272,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -271,12 +328,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
