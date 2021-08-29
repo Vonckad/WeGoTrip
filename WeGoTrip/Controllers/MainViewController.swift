@@ -10,6 +10,12 @@ import MediaPlayer
 
 class MainViewController: UIViewController {
 
+    @IBOutlet weak var mainProgressView: UIProgressView!
+    @IBOutlet weak var playerButton: UIButton!
+    @IBOutlet weak var miniTitle: UILabel!
+    
+    var player: AVPlayer!
+    
     var excursionModel: [ExcursionModel] = []
     let urlImageArray = [ "https://cdn.pixabay.com/photo/2017/04/01/10/59/tokyo-2193354_960_720.jpg",
         "https://cdn.pixabay.com/photo/2013/11/25/09/47/buildings-217878_960_720.jpg",
@@ -20,24 +26,89 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadModel()
+
+        let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel[0].step[0].sound, ofType: "mp3")!)
+        player = AVPlayer(url: urlSound)
+//        let maxTime = Float(player.currentItem?.asset.duration.seconds ?? 0)
+//        mainProgressView.setProgress(0, animated: false)
+        player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1/30.0, preferredTimescale: Int32(NSEC_PER_SEC)), queue: nil) { time in
+            let duration = CMTimeGetSeconds(self.player.currentItem!.duration)
+            self.mainProgressView.progress = Float(time.seconds) / Float(duration)
+        }
     }
     
     func loadModel() {
-        excursionModel
-            .append(
-                ExcursionModel(name: "first",
-                                             step: [StepModel(title: "Tokio",
-                                                            text: """
-                                                            cute anime
-                                                            """,
-                                                              imageArray: urlImageArray,
-                                                              sound: "Tokio")]))
+        excursionModel.append(ExcursionModel(name: "first",step: [StepModel(title: "Tokio",
+        text: """
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        cute anime cute anime cute anime cute anime
+        """,imageArray: urlImageArray,sound: "Tokio")]))
     }
     
     @IBAction func testButton(_ sender: Any) {
+//        createPlayerVC()
+    }
+    @IBAction func playerButtonAction(_ sender: Any) {
+        if player.timeControlStatus == .playing {
+            player.pause()
+        } else { player.play() }
+    }
+    @IBAction func threePointButtonAction(_ sender: Any) {
+        createPlayerVC()
+    }
+    @IBAction func backFiveSButtonAction(_ sender: Any) {
+        rewind(isForward: false)
+//        player.seek(to: CMTime(seconds: Double(mainProgressView.progress) - 5, preferredTimescale: 1000))
+    }
+    @IBAction func forwardFiveSButtonAction(_ sender: Any) {
+        rewind(isForward: true)
+//        player.seek(to: CMTime(seconds: Double(mainProgressView.progress) + 5, preferredTimescale: 1000))
+    }
+    @IBAction func miniPanGesture(_ sender: Any) {
+        let recognizer = sender as! UIPanGestureRecognizer
+        if recognizer.velocity(in: view).y < 100 {
+            createPlayerVC() // вызывается два раза
+        }
+    }
+    func createPlayerVC() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let playerVC = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
         playerVC.stepModels = excursionModel[0].step
-        present(playerVC, animated: true)
+        playerVC.player = player
+        showDetailViewController(playerVC, sender: nil)
+    }
+    func rewind(isForward: Bool) {
+        
+        guard let duration  = player?.currentItem?.duration else {
+            return
+        }
+        let playerCurrentTime = CMTimeGetSeconds(player!.currentTime())
+        
+        if isForward {
+            let newTime = playerCurrentTime + 5
+            if newTime < (CMTimeGetSeconds(duration) - 5) {
+                
+                let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+                player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+            }
+        } else {
+            var newTime = playerCurrentTime - 5
+
+                    if newTime < 0 {
+                        newTime = 0
+                    }
+                let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+                player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        }
     }
 }
