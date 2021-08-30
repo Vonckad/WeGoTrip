@@ -10,26 +10,32 @@ import MediaPlayer
 
 class MainViewController: UIViewController {
 
+    @IBOutlet weak var mainTitleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var mainScrollView: UIScrollView!
+    @IBOutlet weak var mainPageControl: UIPageControl!
+    
     @IBOutlet weak var mainProgressView: UIProgressView!
     @IBOutlet weak var playerButton: UIButton!
-//    @IBOutlet weak var miniTitle: UILabel!
     @IBOutlet weak var testButton: UIButton!
     
     var player: AVPlayer!
-    
     var excursionModel: [ExcursionModel] = []
-    let urlImageArray = [ "https://cdn.pixabay.com/photo/2017/04/01/10/59/tokyo-2193354_960_720.jpg",
-        "https://cdn.pixabay.com/photo/2013/11/25/09/47/buildings-217878_960_720.jpg",
-        "https://cdn.pixabay.com/photo/2019/07/14/08/08/night-4336403_960_720.jpg",
-        "https://cdn.pixabay.com/photo/2014/03/20/01/49/tokyo-290980_960_720.jpg",
-        "https://cdn.pixabay.com/photo/2019/06/08/11/30/japan-4259948_960_720.jpg"
-    ]
+
+    var mySetImage = UIImageView()
+    var frame = CGRect.zero
+
+    let urlImageArray = ["https://images.unsplash.com/photo-1557409518-691ebcd96038?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1533050487297-09b450131914?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"]
     override func viewDidLoad() {
         super.viewDidLoad()
         loadModel()
         
-        
-        
+        mainScrollView.delegate = self
+        mainPageControl.numberOfPages = excursionModel[0].step[0].imageArray.count
+        setupScreens()
         testButton.setTitle(excursionModel[0].step[0].title, for: .normal)
         
         let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel[0].step[0].sound, ofType: "mp3")!)
@@ -41,9 +47,36 @@ class MainViewController: UIViewController {
         
     }
     
+    func setupScreens() {
+        
+        for index in excursionModel[0].step[0].imageArray.indices {
+            
+            frame.origin.x = mainScrollView.frame.size.width * CGFloat(index)
+            frame.size = mainScrollView.frame.size
+            mySetImage = UIImageView(frame: frame)
+            mySetImage.contentMode = .scaleToFill
+            self.mainScrollView.addSubview(mySetImage)
+            getImage(link: excursionModel[0].step[0].imageArray[index], imageV: mySetImage)
+        }
+        mainScrollView.contentSize.width =  mainScrollView.frame.size.width * CGFloat(excursionModel[0].step[0].imageArray.count)
+    }
+    
+    // MARK: - load Image
+    func getImage(link: String, imageV: UIImageView) {
+        
+        guard let imageURL = URL(string: link) else { return }
+        DispatchQueue.global().async {
+            guard let imageData = try? Data(contentsOf: imageURL) else { return }
+            let image = UIImage(data: imageData)
+            DispatchQueue.main.async {
+                imageV.image = image
+            }
+        }
+    }
+    
     //MARK: - CreateModel
     func loadModel() {
-        excursionModel.append(ExcursionModel(name: "first",step: [StepModel(title: "Tokio",
+        excursionModel.append(ExcursionModel(name: "first",step: [StepModel(title: "Tokyo",
         text: """
         cute anime cute anime cute anime cute anime
         cute anime cute anime cute anime cute anime
@@ -112,5 +145,12 @@ class MainViewController: UIViewController {
             let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
             player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         }
+    }
+}
+
+extension MainViewController: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageNumber = mainScrollView.contentOffset.x / mainScrollView.frame.size.width
+        mainPageControl.currentPage = Int(pageNumber)
     }
 }
