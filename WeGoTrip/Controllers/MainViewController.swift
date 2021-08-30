@@ -12,7 +12,8 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var mainProgressView: UIProgressView!
     @IBOutlet weak var playerButton: UIButton!
-    @IBOutlet weak var miniTitle: UILabel!
+//    @IBOutlet weak var miniTitle: UILabel!
+    @IBOutlet weak var testButton: UIButton!
     
     var player: AVPlayer!
     
@@ -26,17 +27,21 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadModel()
-
+        
+        
+        
+        testButton.setTitle(excursionModel[0].step[0].title, for: .normal)
+        
         let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel[0].step[0].sound, ofType: "mp3")!)
         player = AVPlayer(url: urlSound)
-//        let maxTime = Float(player.currentItem?.asset.duration.seconds ?? 0)
-//        mainProgressView.setProgress(0, animated: false)
         player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1/30.0, preferredTimescale: Int32(NSEC_PER_SEC)), queue: nil) { time in
             let duration = CMTimeGetSeconds(self.player.currentItem!.duration)
             self.mainProgressView.progress = Float(time.seconds) / Float(duration)
         }
+        
     }
     
+    //MARK: - CreateModel
     func loadModel() {
         excursionModel.append(ExcursionModel(name: "first",step: [StepModel(title: "Tokio",
         text: """
@@ -55,8 +60,10 @@ class MainViewController: UIViewController {
         """,imageArray: urlImageArray,sound: "Tokio")]))
     }
     
-    @IBAction func testButton(_ sender: Any) {
-//        createPlayerVC()
+    
+    //MARK: - Action
+    @IBAction func testButtonAction(_ sender: Any) {
+        createPlayerVC()
     }
     @IBAction func playerButtonAction(_ sender: Any) {
         if player.timeControlStatus == .playing {
@@ -68,18 +75,11 @@ class MainViewController: UIViewController {
     }
     @IBAction func backFiveSButtonAction(_ sender: Any) {
         rewind(isForward: false)
-//        player.seek(to: CMTime(seconds: Double(mainProgressView.progress) - 5, preferredTimescale: 1000))
     }
     @IBAction func forwardFiveSButtonAction(_ sender: Any) {
         rewind(isForward: true)
-//        player.seek(to: CMTime(seconds: Double(mainProgressView.progress) + 5, preferredTimescale: 1000))
     }
-    @IBAction func miniPanGesture(_ sender: Any) {
-        let recognizer = sender as! UIPanGestureRecognizer
-        if recognizer.velocity(in: view).y < 100 {
-            createPlayerVC() // вызывается два раза
-        }
-    }
+    
     func createPlayerVC() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let playerVC = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
@@ -87,8 +87,10 @@ class MainViewController: UIViewController {
         playerVC.player = player
         showDetailViewController(playerVC, sender: nil)
     }
+    
+    
+    //MARK: - RewindPlayer
     func rewind(isForward: Bool) {
-        
         guard let duration  = player?.currentItem?.duration else {
             return
         }
@@ -103,12 +105,12 @@ class MainViewController: UIViewController {
             }
         } else {
             var newTime = playerCurrentTime - 5
-
-                    if newTime < 0 {
-                        newTime = 0
-                    }
-                let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-                player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+            
+            if newTime < 0 {
+                newTime = 0
+            }
+            let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+            player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         }
     }
 }

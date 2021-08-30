@@ -16,6 +16,7 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var rightTimeLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet var playerPanGesture: UIPanGestureRecognizer!
     
     var stepModels: [StepModel] = []
     
@@ -23,6 +24,14 @@ class PlayerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            playerPanGesture.isEnabled = false
+            modalPresentationStyle = .automatic
+        } else {
+            playerPanGesture.isEnabled = true
+            modalPresentationStyle = .overFullScreen
+        }
         
         titleLabel.text = stepModels[0].title
         textView.text = stepModels[0].text
@@ -57,8 +66,9 @@ class PlayerViewController: UIViewController {
     }
     
     @IBAction func panGesture(_ sender: Any) {
-        let recognizer = sender as! UIPanGestureRecognizer
-        if recognizer.velocity(in: view).y > 1000 {
+//        let recognizer = sender as! UIPanGestureRecognizer
+        
+        if playerPanGesture.velocity(in: view).y > 1000 {
             dismiss(animated: true, completion: nil)
         }
     }
