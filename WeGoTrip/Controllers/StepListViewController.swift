@@ -16,6 +16,7 @@ class StepListViewController: UIViewController {
     var titleText = ""
     var step: [StepModel] = []
     var delegate: StepListViewControllerDelegate?
+    var currentIndex = 0
     
     @IBOutlet weak var stepListTableView: UITableView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -53,11 +54,12 @@ extension StepListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = step[indexPath.row].title
+        if indexPath.row == currentIndex { cell.isSelected = true }
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.setIndex(indexPath.row)
-        print("Выбран этап \(step[indexPath.row].title)")
+        dismiss(animated: true)
+//        print("Выбран этап \(step[indexPath.row].title)")
     }
-    
 }

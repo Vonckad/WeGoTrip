@@ -14,30 +14,31 @@ class MainViewController: UIViewController {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var mainPageControl: UIPageControl!
-    
     @IBOutlet weak var mainProgressView: UIProgressView!
     @IBOutlet weak var playerButton: UIButton!
     @IBOutlet weak var testButton: UIButton!
     
     var player: AVPlayer!
-    var excursionModel: [ExcursionModel] = []
-
+    var excursionModel: ExcursionModel = .init(name: "Токио", step: [])
+    
     var mySetImage = UIImageView()
     var frame = CGRect.zero //для scrollView
     var urlImageArray: [String] = []
+    var currentIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadModel()
-        
         mainScrollView.delegate = self
-        mainPageControl.numberOfPages = excursionModel[0].step[0].imageArray.count
-        setupMainScrollView()
-
-        testButton.setAttributedTitle(NSAttributedString(string: excursionModel[0].step[0].title), for: .normal)
+        loadModel()
+        setupMainScrollView(currentIndex: currentIndex)
+        setupPlayer(currentIndex: currentIndex)
         testButton.titleLabel?.numberOfLines = 2
+    }
+    
+    func setupPlayer(currentIndex: Int) {
+        testButton.setAttributedTitle(NSAttributedString(string: excursionModel.step[currentIndex].title), for: .normal)
         
-        let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel[0].step[0].sound, ofType: "mp3")!)
+        let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel.step[currentIndex].sound, ofType: "mp3")!)
         player = AVPlayer(url: urlSound)
         player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1/30.0, preferredTimescale: Int32(NSEC_PER_SEC)), queue: nil) { time in
             let duration = CMTimeGetSeconds(self.player.currentItem!.duration)
@@ -45,23 +46,26 @@ class MainViewController: UIViewController {
         }
     }
     
-    func setupMainScrollView() {
-        
-        for index in excursionModel[0].step[0].imageArray.indices {
+    func setupMainScrollView(currentIndex: Int) {
+        for sub in mainScrollView.subviews {
+            sub.removeFromSuperview()
+        }
+        mainPageControl.numberOfPages = excursionModel.step[currentIndex].imageArray.count
+
+        for index in excursionModel.step[currentIndex].imageArray.indices {
             
             frame.origin.x = mainScrollView.frame.size.width * CGFloat(index)
             frame.size = mainScrollView.frame.size
             mySetImage = UIImageView(frame: frame)
-            mySetImage.contentMode = .scaleToFill
+            mySetImage.contentMode = .scaleAspectFit
             self.mainScrollView.addSubview(mySetImage)
-            getImage(link: excursionModel[0].step[0].imageArray[index], imageV: mySetImage)
+            getImage(link: excursionModel.step[currentIndex].imageArray[index], imageV: mySetImage)
         }
-        mainScrollView.contentSize.width =  mainScrollView.frame.size.width * CGFloat(excursionModel[0].step[0].imageArray.count)
+        mainScrollView.contentSize.width =  mainScrollView.frame.size.width * CGFloat(excursionModel.step[currentIndex].imageArray.count)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if player.timeControlStatus == .playing {
+    func playOrPause(_ bool: Bool) {
+        if bool {
             playerButton.setImage(UIImage(named: "icons8-pause-60"), for: .normal)
         } else {
             playerButton.setImage(UIImage(named: "icons8-play-60"), for: .normal)
@@ -81,28 +85,12 @@ class MainViewController: UIViewController {
         }
     }
     
-    //MARK: - CreateModel
-    func loadModel() {
-        
-        urlImageArray = ["https://images.unsplash.com/photo-1557409518-691ebcd96038?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                         "https://images.unsplash.com/photo-1533050487297-09b450131914?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                         "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                         "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"]
-        
-        excursionModel.append(ExcursionModel(name: "Токио",step: [StepModel(title: "Добро пожаловать в Токио",
-        text: """
-        Токио манит яркими огнями: как будто попал в будущее и столько нового предстоит изучить! Токио - огромный и многогранный город, и чтобы не потеряться в его суете, предлагаем вам обзорную экскурсию по самым увлекательным местам японской столицы!
-
-        Посетив Токио с обзорной экскурсией, вы убедитесь, что Япония невозможна без традиций и изысканного очарования прошлого. Восточный сад императорского дворца - место покоя и единения с природой посреди каменных "джунглей" города. Сторожевые башни стен дворца, прекрасный сад с прудом, созданные в 17 веке отвлекут от суеты и покажут другую сторону Японии. (Восточный сад закрыт по понедельникам и пятницам. Если экскурсия выпадает на один из этих дней, мы прогуляемся по обширному парку вокруг территории дворца, полюбуемся на мост "Нидзюбаси".)
-        """,imageArray: urlImageArray,sound: "Tokio")]))
-    }
-    
-    
     //MARK: - Action
     @IBAction func testButtonAction(_ sender: Any) {
         createPlayerVC()
     }
     @IBAction func playerButtonAction(_ sender: Any) {
+            
         if player.timeControlStatus == .playing {
             player.pause()
             playerButton.setImage(UIImage(named: "icons8-play-60"), for: .normal)
@@ -125,13 +113,13 @@ class MainViewController: UIViewController {
     func createPlayerVC() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let playerVC = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
-        playerVC.stepModels = excursionModel[0].step
+        playerVC.stepModels = excursionModel.step
         playerVC.player = player
-        playerVC.mainTitle = excursionModel[0].name
+        playerVC.mainTitle = excursionModel.name
         playerVC.playerVCDelegate = self
+        playerVC.currentIndex = currentIndex
         showDetailViewController(playerVC, sender: nil)
     }
-    
     
     //MARK: - RewindPlayer
     static func rewind(player: AVPlayer, isForward: Bool) {
@@ -169,11 +157,45 @@ extension MainViewController: UIScrollViewDelegate {
 
     //MARK: - PlayerViewControllerDelegate
 extension MainViewController: PlayerViewControllerDelegate {
+    
+    func index(_ index: Int) {
+        currentIndex = index
+        player.pause()
+        playOrPause(false)
+        setupMainScrollView(currentIndex: index)
+        setupPlayer(currentIndex: index)
+    }
+    
     func isPlaing(_ bool: Bool) {
-        if bool {
-            playerButton.setImage(UIImage(named: "icons8-pause-60"), for: .normal)
-        } else {
-            playerButton.setImage(UIImage(named: "icons8-play-60"), for: .normal)
-        }
+        playOrPause(bool)
+    }
+}
+
+    //MARK: - CreateModel
+extension MainViewController {
+    func loadModel() {
+        let tokyo1 = StepModel(title: "Добро пожаловать в Токио", text: """
+            Токио манит яркими огнями: как будто попал в будущее и столько нового предстоит изучить! Токио - огромный и многогранный город, и чтобы не потеряться в его суете, предлагаем вам обзорную экскурсию по самым увлекательным местам японской столицы!
+            
+            Посетив Токио с обзорной экскурсией, вы убедитесь, что Япония невозможна без традиций и изысканного очарования прошлого. Восточный сад императорского дворца - место покоя и единения с природой посреди каменных "джунглей" города. Сторожевые башни стен дворца, прекрасный сад с прудом, созданные в 17 веке отвлекут от суеты и покажут другую сторону Японии. (Восточный сад закрыт по понедельникам и пятницам. Если экскурсия выпадает на один из этих дней, мы прогуляемся по обширному парку вокруг территории дворца, полюбуемся на мост "Нидзюбаси".)
+            """, imageArray: ["https://wikiway.com/upload/resize_cache/hl-photo/a85/720_400_1/televizionnaya_bashnya_tokio_42.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/02d/720_400_1/televizionnaya_bashnya_tokio_39.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/ff4/720_400_1/televizionnaya_bashnya_tokio_38.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/a25/720_400_1/televizionnaya_bashnya_tokio_33.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/e8e/720_400_1/televizionnaya_bashnya_tokio_5.jpg"], sound: "Tokio")
+                
+        let tokyo2 = StepModel(title: "Императорский Дворец", text: """
+            Если Токио и имеет какой-то единый центр, то это нынешний Императорский дворец, который стоит на месте замка Эдо (сёгунат Токугава правил отсюда Японией на протяжении 265 лет). Дворец был почти полностью уничтожен бомбардировками Второй мировой войны, затем восстановлен с использованием железобетона. Это здание — наименее интересная часть некогда самой обширной фортификационной системы в мире, хотя попасть внутрь все равно не удастся. Во дворце по-прежнему проживает императорская семья, а потому его территория доступна для посещения лишь два дня в году — 2 января и 23 декабря. Но и в эти дни вам будет непросто пробиться сквозь многотысячные толпы японцев, желающих засвидетельствовать почтение своему императору. При этом аллея, окружающая дворцовую территорию, ежедневно используется сотнями любителей бега.
+            
+            Что вы действительно сможете увидеть, так это красивый Восточный сад, ров с массивными каменными стенами и несколько образцов классической японской архитектуры — ворота, мосты, арсеналы, сторожевые башни, — сохранившихся с XVII в. Чтобы попасть в Восточный сад (вт—чт, сб, вс 9.00—16.30, 15 апреля — август 9.00— 17.00, ноябрь — февраль 9.00—16.00), от станции метро «Otemachi» пройдите через ворота Отемон и далее прогуляйтесь вдоль живой изгороди из белых и красных азалий, по берегам прудов и у маленьких водопадов в окружении сосен, сливовых деревьев, канарских пальм и нежной зелени криптомерии японской. Над верхушками деревьев время от времени будут просматриваться небоскребы современного Токио. К северу от сада, а также в пределах периметра, очерченного дворцовым рвом, раскинулся густо засаженный деревьями парк Китаномару со сложенной из красного кирпича Галереей ремесел (вт—вс 10.00—17.00). Галерея занимает здание эпохи Мэйдзи, и ее экспозиция послужит прекрасным введением в историю японского искусства и традиционных промыслов. В парке также располагаются Музей науки (вт—в с 9.30—16.50) с интерактивными и высокотехнологичными экспонатами и яркий по своей архитектуре зал боевых искусств Ниппон Будокан.
+
+            Прогулка по часовой стрелке сначала приведет вас к живописному мосту Нидзюбаси и воротам Сэймон, через которые публика допускается на территорию дворца. Далее вы минуете самые заметные из современных правительственных зданий страны, занимаемые Национальным парламентом и Верховным судом. Полный обход территории позволит увидеть Национальный театр и Национальный музей современного искусства.
+            """, imageArray: ["https://wikiway.com/upload/resize_cache/hl-photo/707/720_400_1/imperatorskiy_dvorets_v_tokyo_64.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/d49/720_400_1/imperatorskiy_dvorets_v_tokyo_65.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/abe/720_400_1/imperatorskiy_dvorets_v_tokyo_82.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/92f/720_400_1/imperatorskiy_dvorets_v_tokyo_79.jpg"],  sound: "Tokyo2")
+        
+        let tokyo3 = StepModel(title: "Синтоистский Храм Ясукуни", text: """
+            В случае, если Восточный сад императорского дворца будет закрыт, прогулку по парку возле дворца можно заменить на посещение Мэйдзи-дзингу и района Харадзюку. Для самих японцев одним из важнейших духовных мест является святилище Мэйдзи – Мэйдзи-дзингу. Сюда приходят за благословением будь это свадьба, рождение ребенка, деловые решения или другое ключевое событие в жизни. Святилище находится в большом парке, что создает отстраненную и спокойную атмосферу даже в центре оживленного города. Совсем рядом со святилищем расположен самый модный район города – Харадзюку. Молодежь со всего города стекается сюда, чтобы побродить по местным магазинчикам в поисках стильной и оригинальной одежды.
+
+            Опция. Если вы мечтаете увидеть роботов в Японии, в качестве опционной части программы можете забронировать у нас посещение выставочного центра Хонда. Здесь не только увидите автомобили и мотоциклы этого производителя, но и насладитесь шоу робота Асимо без толп туристов и даже сможете сфотографироваться с ним! Шоу, как правило, проводится по расписанию 2-3 раза в день, иногда бывают выходные.
+            """, imageArray: ["https://wikiway.com/upload/resize_cache/hl-photo/bbf/53e/720_400_1/ostrov-khokkaydo_158.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/81a/720_400_1/kinkakuji_3.jpg", "https://wikiway.com/upload/resize_cache/hl-photo/67a/720_400_1/imperatorskiy_dvorets_v_tokyo_54.jpg"], sound: "Tokyo3")
+        
+        excursionModel.step.append(tokyo1)
+        excursionModel.step.append(tokyo2)
+        excursionModel.step.append(tokyo3)
     }
 }

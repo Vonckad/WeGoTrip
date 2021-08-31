@@ -224,11 +224,8 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K7f-ef-tdF">
                                         <rect key="frame" x="8" y="8" width="398" height="266.5"/>
                                         <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-0.5" minValue="-0.5" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="C6k-MJ-x5C">
+                                            <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-0.5" minValue="-0.5" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="C6k-MJ-x5C">
                                                 <rect key="frame" x="6" y="60.5" width="386" height="31"/>
-                                                <connections>
-                                                    <action selector="sliderAction:" destination="XSe-aG-Kaw" eventType="valueChanged" id="7fl-qc-3Vg"/>
-                                                </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kOn-hW-Dll">
                                                 <rect key="frame" x="16" y="98.5" width="35.5" height="20.5"/>
@@ -264,7 +261,9 @@
                                                     <constraint firstAttribute="height" constant="48" id="42G-OM-Gx1"/>
                                                     <constraint firstAttribute="width" secondItem="nLY-Mb-Zla" secondAttribute="height" multiplier="1:1" id="EwB-Oi-92u"/>
                                                 </constraints>
-                                                <state key="normal" image="icons8-replay-5-96"/>
+                                                <state key="normal">
+                                                    <imageReference key="image" image="icons8-replay-5-96" symbolScale="large"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="backFive:" destination="XSe-aG-Kaw" eventType="touchUpInside" id="xyn-Ky-tHX"/>
                                                 </connections>

@@ -10,6 +10,7 @@ import MediaPlayer
 
 protocol PlayerViewControllerDelegate {
     func isPlaing(_ bool: Bool)
+    func index(_ index: Int)
 }
 
 class PlayerViewController: UIViewController {
@@ -29,10 +30,13 @@ class PlayerViewController: UIViewController {
     var stepModels: [StepModel] = []
     var mainTitle = ""
     var player: AVPlayer!
+    var currentIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupText(currentIndex: currentIndex)
         playerView.layer.cornerRadius = 15
+        
         if #available(iOS 13.0, *) {
             playerPanGesture.isEnabled = false
             modalPresentationStyle = .automatic
@@ -40,11 +44,7 @@ class PlayerViewController: UIViewController {
             playerPanGesture.isEnabled = true
             modalPresentationStyle = .overFullScreen
         }
-        
-        titleLabel.text = mainTitle
-        playerViewTitleLabel.text = stepModels[0].title
-        textView.text = stepModels[0].text
-        
+
         let maxTime = Float(player.currentItem?.asset.duration.seconds ?? 0)
         mySlider.maximumValue = maxTime
         rightTimeLabel.text = "\(maxTime)"
@@ -53,17 +53,27 @@ class PlayerViewController: UIViewController {
             self.leftTimeLabel.text = "\(time.seconds)"
             self.mySlider.value = Float(time.seconds)
         }
-        
+        playOrPauseImage()
+    }
+    
+    func playOrPauseImage() {
         if player.timeControlStatus == .playing {
             playButton.setImage(UIImage(named: "icons8-pause-64"), for: .normal)
         } else {
             playButton.setImage(UIImage(named: "icons8-play-64"), for: .normal)
         }
     }
-    @IBAction func sliderAction(_ sender: Any) {
-        player.seek(to: CMTime(seconds: Double(mySlider.value), preferredTimescale: 1000))
-        leftTimeLabel.text = "\(mySlider.value)"
+    
+    func setupText(currentIndex: Int) {
+        titleLabel.text = mainTitle
+        playerViewTitleLabel.text = stepModels[currentIndex].title
+        textView.text = stepModels[currentIndex].text
     }
+    
+//    @IBAction func sliderAction(_ sender: Any) {
+//        player.seek(to: CMTime(seconds: Double(mySlider.value), preferredTimescale: 1000))
+//        leftTimeLabel.text = "\(mySlider.value)"
+//    }
     
     // MARK: - Button Action
 
@@ -92,6 +102,7 @@ class PlayerViewController: UIViewController {
         stepVC?.step = stepModels
         stepVC?.titleText = mainTitle
         stepVC?.delegate = self
+        stepVC?.currentIndex = currentIndex
         showDetailViewController(stepVC!, sender: nil) //unwrap
     }
     @IBAction func backFive(_ sender: Any) {
@@ -107,6 +118,10 @@ class PlayerViewController: UIViewController {
 
 extension PlayerViewController: StepListViewControllerDelegate {
     func setIndex(_ index: Int) {
-        print(#line, stepModels[index].title)
+        dismiss(animated: true) {
+            self.playerVCDelegate?.index(index)
+            self.playOrPauseImage()
+            self.setupText(currentIndex: self.currentIndex)
+        }
     }
 }

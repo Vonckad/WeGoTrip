@@ -18,6 +18,8 @@
 		E31F825126DA90DD00CF3698 /* ExcursionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F825026DA90DD00CF3698 /* ExcursionModel.swift */; };
 		E31F825326DA988800CF3698 /* Tokio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E31F825226DA988800CF3698 /* Tokio.mp3 */; };
 		E3C7DCE826DE011F0079F643 /* StepListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C7DCE726DE011F0079F643 /* StepListViewController.swift */; };
+		E3C7DCEA26DE62ED0079F643 /* Tokyo2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E3C7DCE926DE62ED0079F643 /* Tokyo2.mp3 */; };
+		E3C7DCEC26DE64CB0079F643 /* Tokyo3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E3C7DCEB26DE64CB0079F643 /* Tokyo3.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		E31F825026DA90DD00CF3698 /* ExcursionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcursionModel.swift; sourceTree = "<group>"; };
 		E31F825226DA988800CF3698 /* Tokio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tokio.mp3; sourceTree = "<group>"; };
 		E3C7DCE726DE011F0079F643 /* StepListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepListViewController.swift; sourceTree = "<group>"; };
+		E3C7DCE926DE62ED0079F643 /* Tokyo2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tokyo2.mp3; sourceTree = "<group>"; };
+		E3C7DCEB26DE64CB0079F643 /* Tokyo3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tokyo3.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,8 @@
 				E31F824926DA883A00CF3698 /* View */,
 				E389932E26DAA2B70041610D /* Sound */,
 				E31F825226DA988800CF3698 /* Tokio.mp3 */,
+				E3C7DCE926DE62ED0079F643 /* Tokyo2.mp3 */,
+				E3C7DCEB26DE64CB0079F643 /* Tokyo3.mp3 */,
 				E31F823D26DA875600CF3698 /* Assets.xcassets */,
 				E31F824226DA875600CF3698 /* Info.plist */,
 			);
@@ -183,6 +189,8 @@
 				E31F825326DA988800CF3698 /* Tokio.mp3 in Resources */,
 				E31F823E26DA875600CF3698 /* Assets.xcassets in Resources */,
 				E31F823C26DA875100CF3698 /* Main.storyboard in Resources */,
+				E3C7DCEA26DE62ED0079F643 /* Tokyo2.mp3 in Resources */,
+				E3C7DCEC26DE64CB0079F643 /* Tokyo3.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
