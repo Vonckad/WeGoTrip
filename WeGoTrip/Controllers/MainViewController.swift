@@ -23,11 +23,9 @@ class MainViewController: UIViewController {
     var excursionModel: [ExcursionModel] = []
 
     var mySetImage = UIImageView()
-    var frame = CGRect.zero
-    let urlImageArray = ["https://images.unsplash.com/photo-1557409518-691ebcd96038?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        "https://images.unsplash.com/photo-1533050487297-09b450131914?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"]
+    var frame = CGRect.zero //для scrollView
+    var urlImageArray: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadModel()
@@ -61,11 +59,6 @@ class MainViewController: UIViewController {
         mainScrollView.contentSize.width =  mainScrollView.frame.size.width * CGFloat(excursionModel[0].step[0].imageArray.count)
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        print("apear")
-//    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if player.timeControlStatus == .playing {
@@ -90,20 +83,17 @@ class MainViewController: UIViewController {
     
     //MARK: - CreateModel
     func loadModel() {
+        
+        urlImageArray = ["https://images.unsplash.com/photo-1557409518-691ebcd96038?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                         "https://images.unsplash.com/photo-1533050487297-09b450131914?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                         "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                         "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"]
+        
         excursionModel.append(ExcursionModel(name: "Токио",step: [StepModel(title: "Добро пожаловать в Токио",
         text: """
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
-        cute anime cute anime cute anime cute anime
+        Токио манит яркими огнями: как будто попал в будущее и столько нового предстоит изучить! Токио - огромный и многогранный город, и чтобы не потеряться в его суете, предлагаем вам обзорную экскурсию по самым увлекательным местам японской столицы!
+
+        Посетив Токио с обзорной экскурсией, вы убедитесь, что Япония невозможна без традиций и изысканного очарования прошлого. Восточный сад императорского дворца - место покоя и единения с природой посреди каменных "джунглей" города. Сторожевые башни стен дворца, прекрасный сад с прудом, созданные в 17 веке отвлекут от суеты и покажут другую сторону Японии. (Восточный сад закрыт по понедельникам и пятницам. Если экскурсия выпадает на один из этих дней, мы прогуляемся по обширному парку вокруг территории дворца, полюбуемся на мост "Нидзюбаси".)
         """,imageArray: urlImageArray,sound: "Tokio")]))
     }
     
@@ -131,6 +121,7 @@ class MainViewController: UIViewController {
         MainViewController.rewind(player: player, isForward: true)
     }
     
+    //MARK: - showPlayerViewController
     func createPlayerVC() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let playerVC = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
@@ -168,6 +159,7 @@ class MainViewController: UIViewController {
     }
 }
 
+    //MARK: - UIScrollViewDelegate
 extension MainViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = mainScrollView.contentOffset.x / mainScrollView.frame.size.width
@@ -175,7 +167,8 @@ extension MainViewController: UIScrollViewDelegate {
     }
 }
 
-extension MainViewController: PlayerViewControllerProtocol {
+    //MARK: - PlayerViewControllerDelegate
+extension MainViewController: PlayerViewControllerDelegate {
     func isPlaing(_ bool: Bool) {
         if bool {
             playerButton.setImage(UIImage(named: "icons8-pause-60"), for: .normal)

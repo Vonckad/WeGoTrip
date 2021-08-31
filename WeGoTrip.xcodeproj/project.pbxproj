@@ -17,6 +17,7 @@
 		E31F824F26DA89EF00CF3698 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F824E26DA89EF00CF3698 /* PlayerViewController.swift */; };
 		E31F825126DA90DD00CF3698 /* ExcursionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F825026DA90DD00CF3698 /* ExcursionModel.swift */; };
 		E31F825326DA988800CF3698 /* Tokio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E31F825226DA988800CF3698 /* Tokio.mp3 */; };
+		E3C7DCE826DE011F0079F643 /* StepListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C7DCE726DE011F0079F643 /* StepListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		E31F824E26DA89EF00CF3698 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		E31F825026DA90DD00CF3698 /* ExcursionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcursionModel.swift; sourceTree = "<group>"; };
 		E31F825226DA988800CF3698 /* Tokio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tokio.mp3; sourceTree = "<group>"; };
+		E3C7DCE726DE011F0079F643 /* StepListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				E31F823826DA875100CF3698 /* MainViewController.swift */,
 				E31F824E26DA89EF00CF3698 /* PlayerViewController.swift */,
+				E3C7DCE726DE011F0079F643 /* StepListViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				E31F823926DA875100CF3698 /* MainViewController.swift in Sources */,
 				E31F823526DA875100CF3698 /* AppDelegate.swift in Sources */,
 				E31F825126DA90DD00CF3698 /* ExcursionModel.swift in Sources */,
+				E3C7DCE826DE011F0079F643 /* StepListViewController.swift in Sources */,
 				E31F823726DA875100CF3698 /* SceneDelegate.swift in Sources */,
 				E31F824D26DA888400CF3698 /* StepModel.swift in Sources */,
 				E31F824F26DA89EF00CF3698 /* PlayerViewController.swift in Sources */,

@@ -8,7 +8,7 @@
 import UIKit
 import MediaPlayer
 
-protocol PlayerViewControllerProtocol {
+protocol PlayerViewControllerDelegate {
     func isPlaing(_ bool: Bool)
 }
 
@@ -24,7 +24,7 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var playerPanGesture: UIPanGestureRecognizer!
     
-    var playerVCDelegate: PlayerViewControllerProtocol?
+    var playerVCDelegate: PlayerViewControllerDelegate?
     
     var stepModels: [StepModel] = []
     var mainTitle = ""
@@ -86,6 +86,14 @@ class PlayerViewController: UIViewController {
     @IBAction func dismisVC(_ sender: Any) {
         dismiss(animated: true)
     }
+    @IBAction func showStepVCAction(_ sender: Any) {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let stepVC = storyboard.instantiateViewController(withIdentifier: "StepListViewController") as? StepListViewController
+        stepVC?.step = stepModels
+        stepVC?.titleText = mainTitle
+        stepVC?.delegate = self
+        showDetailViewController(stepVC!, sender: nil) //unwrap
+    }
     @IBAction func backFive(_ sender: Any) {
         MainViewController.rewind(player: player, isForward: false)
     }
@@ -94,5 +102,11 @@ class PlayerViewController: UIViewController {
         if playerPanGesture.velocity(in: view).y > 1000 {
             dismiss(animated: true, completion: nil)
         }
+    }
+}
+
+extension PlayerViewController: StepListViewControllerDelegate {
+    func setIndex(_ index: Int) {
+        print(#line, stepModels[index].title)
     }
 }
