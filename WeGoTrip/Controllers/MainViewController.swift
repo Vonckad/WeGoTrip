@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
 
     var mySetImage = UIImageView()
     var frame = CGRect.zero
-
     let urlImageArray = ["https://images.unsplash.com/photo-1557409518-691ebcd96038?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
         "https://images.unsplash.com/photo-1533050487297-09b450131914?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHRva3lvfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
         "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8dG9reW98ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
@@ -35,8 +34,10 @@ class MainViewController: UIViewController {
         
         mainScrollView.delegate = self
         mainPageControl.numberOfPages = excursionModel[0].step[0].imageArray.count
-        setupScreens()
-        testButton.setTitle(excursionModel[0].step[0].title, for: .normal)
+        setupMainScrollView()
+
+        testButton.setAttributedTitle(NSAttributedString(string: excursionModel[0].step[0].title), for: .normal)
+        testButton.titleLabel?.numberOfLines = 2
         
         let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel[0].step[0].sound, ofType: "mp3")!)
         player = AVPlayer(url: urlSound)
@@ -44,10 +45,9 @@ class MainViewController: UIViewController {
             let duration = CMTimeGetSeconds(self.player.currentItem!.duration)
             self.mainProgressView.progress = Float(time.seconds) / Float(duration)
         }
-        
     }
     
-    func setupScreens() {
+    func setupMainScrollView() {
         
         for index in excursionModel[0].step[0].imageArray.indices {
             
@@ -59,6 +59,20 @@ class MainViewController: UIViewController {
             getImage(link: excursionModel[0].step[0].imageArray[index], imageV: mySetImage)
         }
         mainScrollView.contentSize.width =  mainScrollView.frame.size.width * CGFloat(excursionModel[0].step[0].imageArray.count)
+    }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        print("apear")
+//    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if player.timeControlStatus == .playing {
+            playerButton.setImage(UIImage(named: "icons8-pause-60"), for: .normal)
+        } else {
+            playerButton.setImage(UIImage(named: "icons8-play-60"), for: .normal)
+        }
     }
     
     // MARK: - load Image
@@ -76,7 +90,7 @@ class MainViewController: UIViewController {
     
     //MARK: - CreateModel
     func loadModel() {
-        excursionModel.append(ExcursionModel(name: "first",step: [StepModel(title: "Tokyo",
+        excursionModel.append(ExcursionModel(name: "Токио",step: [StepModel(title: "Добро пожаловать в Токио",
         text: """
         cute anime cute anime cute anime cute anime
         cute anime cute anime cute anime cute anime
@@ -101,16 +115,20 @@ class MainViewController: UIViewController {
     @IBAction func playerButtonAction(_ sender: Any) {
         if player.timeControlStatus == .playing {
             player.pause()
-        } else { player.play() }
+            playerButton.setImage(UIImage(named: "icons8-play-60"), for: .normal)
+        } else {
+            player.play()
+            playerButton.setImage(UIImage(named: "icons8-pause-60"), for: .normal)
+        }
     }
     @IBAction func threePointButtonAction(_ sender: Any) {
         createPlayerVC()
     }
     @IBAction func backFiveSButtonAction(_ sender: Any) {
-        rewind(isForward: false)
+        MainViewController.rewind(player: player, isForward: false)
     }
     @IBAction func forwardFiveSButtonAction(_ sender: Any) {
-        rewind(isForward: true)
+        MainViewController.rewind(player: player, isForward: true)
     }
     
     func createPlayerVC() {
@@ -118,23 +136,25 @@ class MainViewController: UIViewController {
         let playerVC = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
         playerVC.stepModels = excursionModel[0].step
         playerVC.player = player
+        playerVC.mainTitle = excursionModel[0].name
+        playerVC.playerVCDelegate = self
         showDetailViewController(playerVC, sender: nil)
     }
     
     
     //MARK: - RewindPlayer
-    func rewind(isForward: Bool) {
-        guard let duration  = player?.currentItem?.duration else {
+    static func rewind(player: AVPlayer, isForward: Bool) {
+        guard let duration  = player.currentItem?.duration else {
             return
         }
-        let playerCurrentTime = CMTimeGetSeconds(player!.currentTime())
+        let playerCurrentTime = CMTimeGetSeconds(player.currentTime())
         
         if isForward {
             let newTime = playerCurrentTime + 5
             if newTime < (CMTimeGetSeconds(duration) - 5) {
                 
                 let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-                player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+                player.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
             }
         } else {
             var newTime = playerCurrentTime - 5
@@ -143,7 +163,7 @@ class MainViewController: UIViewController {
                 newTime = 0
             }
             let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-            player!.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+            player.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         }
     }
 }
@@ -152,5 +172,15 @@ extension MainViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = mainScrollView.contentOffset.x / mainScrollView.frame.size.width
         mainPageControl.currentPage = Int(pageNumber)
+    }
+}
+
+extension MainViewController: PlayerViewControllerProtocol {
+    func isPlaing(_ bool: Bool) {
+        if bool {
+            playerButton.setImage(UIImage(named: "icons8-pause-60"), for: .normal)
+        } else {
+            playerButton.setImage(UIImage(named: "icons8-play-60"), for: .normal)
+        }
     }
 }

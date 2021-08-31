@@ -8,9 +8,15 @@
 import UIKit
 import MediaPlayer
 
+protocol PlayerViewControllerProtocol {
+    func isPlaing(_ bool: Bool)
+}
+
 class PlayerViewController: UIViewController {
 
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var playerView: UIView!
+    @IBOutlet weak var playerViewTitleLabel: UILabel!
     @IBOutlet weak var mySlider: UISlider!
     @IBOutlet weak var leftTimeLabel: UILabel!
     @IBOutlet weak var rightTimeLabel: UILabel!
@@ -18,13 +24,15 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var playerPanGesture: UIPanGestureRecognizer!
     
-    var stepModels: [StepModel] = []
+    var playerVCDelegate: PlayerViewControllerProtocol?
     
+    var stepModels: [StepModel] = []
+    var mainTitle = ""
     var player: AVPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        playerView.layer.cornerRadius = 15
         if #available(iOS 13.0, *) {
             playerPanGesture.isEnabled = false
             modalPresentationStyle = .automatic
@@ -33,7 +41,8 @@ class PlayerViewController: UIViewController {
             modalPresentationStyle = .overFullScreen
         }
         
-        titleLabel.text = stepModels[0].title
+        titleLabel.text = mainTitle
+        playerViewTitleLabel.text = stepModels[0].title
         textView.text = stepModels[0].text
         
         let maxTime = Float(player.currentItem?.asset.duration.seconds ?? 0)
@@ -44,30 +53,44 @@ class PlayerViewController: UIViewController {
             self.leftTimeLabel.text = "\(time.seconds)"
             self.mySlider.value = Float(time.seconds)
         }
+        
+        if player.timeControlStatus == .playing {
+            playButton.setImage(UIImage(named: "icons8-pause-64"), for: .normal)
+        } else {
+            playButton.setImage(UIImage(named: "icons8-play-64"), for: .normal)
+        }
     }
     @IBAction func sliderAction(_ sender: Any) {
         player.seek(to: CMTime(seconds: Double(mySlider.value), preferredTimescale: 1000))
         leftTimeLabel.text = "\(mySlider.value)"
     }
     
+    // MARK: - Button Action
+
     @IBAction func playButtonAction(_ sender: Any) {
 
         if player.timeControlStatus == .paused {
-            playButton.setTitle("Pause", for: .normal)
+            playButton.setImage(UIImage(named: "icons8-pause-64"), for: .normal)
             player.play()
+            playerVCDelegate?.isPlaing(true)
         } else {
             player.pause()
-            playButton.setTitle("Play", for: .normal)
+            playerVCDelegate?.isPlaing(false)
+            playButton.setImage(UIImage(named: "icons8-play-64"), for: .normal)
         }
+    }
+    @IBAction func forwardFive(_ sender: Any) {
+        MainViewController.rewind(player: player, isForward: true)
     }
     
     @IBAction func dismisVC(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
+    }
+    @IBAction func backFive(_ sender: Any) {
+        MainViewController.rewind(player: player, isForward: false)
     }
     
     @IBAction func panGesture(_ sender: Any) {
-//        let recognizer = sender as! UIPanGestureRecognizer
-        
         if playerPanGesture.velocity(in: view).y > 1000 {
             dismiss(animated: true, completion: nil)
         }
