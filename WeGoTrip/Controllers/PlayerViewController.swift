@@ -31,6 +31,7 @@ class PlayerViewController: UIViewController {
     var mainTitle = ""
     var player: AVPlayer!
     var currentIndex = 0
+    var currentPlayerTime = CMTime()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,20 +45,34 @@ class PlayerViewController: UIViewController {
             playerPanGesture.isEnabled = true
             modalPresentationStyle = .overFullScreen
         }
-
-        let maxTime = Float(player.currentItem?.asset.duration.seconds ?? 0)
-        mySlider.maximumValue = maxTime
-        rightTimeLabel.text = "\(maxTime)"
         
+        guard let maxTime = player.currentItem?.asset.duration else { return }
+        mySlider.maximumValue = Float(maxTime.seconds)
+        rightTimeLabel.text = convertCMTimeToString(maxTime)
+        mySlider.setValue(Float(currentPlayerTime.seconds), animated: false)
+        leftTimeLabel.text = convertCMTimeToString(currentPlayerTime)
         player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1000), queue: DispatchQueue.main) { time in
-            self.leftTimeLabel.text = "\(time.seconds)"
+            self.leftTimeLabel.text = self.convertCMTimeToString(time)
             self.mySlider.value = Float(time.seconds)
         }
-        playOrPauseImage()
+        playOrPauseImage(player.timeControlStatus == .playing)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(animationDidFinish(_:)),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: player.currentItem)
     }
     
-    func playOrPauseImage() {
-        if player.timeControlStatus == .playing {
+    @objc func animationDidFinish(_ notification: NSNotification) {
+        playOrPauseImage(false)
+    }
+    
+    func convertCMTimeToString(_ time: CMTime) -> String {
+        let secs = Int(time.seconds)
+        return NSString(format: "%02d:%02d", secs/60, secs%60) as String
+    }
+    
+    func playOrPauseImage(_ bool: Bool) {
+        if bool {
             playButton.setImage(UIImage(named: "icons8-pause-64"), for: .normal)
         } else {
             playButton.setImage(UIImage(named: "icons8-play-64"), for: .normal)
@@ -69,11 +84,6 @@ class PlayerViewController: UIViewController {
         playerViewTitleLabel.text = stepModels[currentIndex].title
         textView.text = stepModels[currentIndex].text
     }
-    
-//    @IBAction func sliderAction(_ sender: Any) {
-//        player.seek(to: CMTime(seconds: Double(mySlider.value), preferredTimescale: 1000))
-//        leftTimeLabel.text = "\(mySlider.value)"
-//    }
     
     // MARK: - Button Action
 
@@ -116,12 +126,9 @@ class PlayerViewController: UIViewController {
     }
 }
 
+    //MARK: - StepListViewControllerDelegate
 extension PlayerViewController: StepListViewControllerDelegate {
     func setIndex(_ index: Int) {
-        dismiss(animated: true) {
-            self.playerVCDelegate?.index(index)
-            self.playOrPauseImage()
-            self.setupText(currentIndex: self.currentIndex)
-        }
+        playerVCDelegate?.index(index)
     }
 }

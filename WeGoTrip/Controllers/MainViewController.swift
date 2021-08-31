@@ -22,7 +22,7 @@ class MainViewController: UIViewController {
     var excursionModel: ExcursionModel = .init(name: "Токио", step: [])
     
     var mySetImage = UIImageView()
-    var frame = CGRect.zero //для scrollView
+    var frame = CGRect.zero
     var urlImageArray: [String] = []
     var currentIndex = 0
     
@@ -35,7 +35,10 @@ class MainViewController: UIViewController {
         testButton.titleLabel?.numberOfLines = 2
     }
     
+    //MARK: - setup UI
     func setupPlayer(currentIndex: Int) {
+        mainTitleLabel.text = excursionModel.step[currentIndex].title
+        mainProgressView.setProgress(0.0, animated: false)
         testButton.setAttributedTitle(NSAttributedString(string: excursionModel.step[currentIndex].title), for: .normal)
         
         let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel.step[currentIndex].sound, ofType: "mp3")!)
@@ -44,6 +47,15 @@ class MainViewController: UIViewController {
             let duration = CMTimeGetSeconds(self.player.currentItem!.duration)
             self.mainProgressView.progress = Float(time.seconds) / Float(duration)
         }
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(animationDidFinish(_:)),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: player.currentItem)
+    }
+    
+    @objc func animationDidFinish(_ notification: NSNotification) {
+        playOrPause(false)
+        player.seek(to: CMTime(seconds: 0.0, preferredTimescale: 1000))
     }
     
     func setupMainScrollView(currentIndex: Int) {
@@ -118,6 +130,7 @@ class MainViewController: UIViewController {
         playerVC.mainTitle = excursionModel.name
         playerVC.playerVCDelegate = self
         playerVC.currentIndex = currentIndex
+        playerVC.currentPlayerTime = player.currentTime()
         showDetailViewController(playerVC, sender: nil)
     }
     

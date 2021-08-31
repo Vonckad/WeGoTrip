@@ -192,21 +192,21 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="nil" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mor-Vg-vpM">
-                                <rect key="frame" x="16" y="425.5" width="382" height="420.5"/>
+                                <rect key="frame" x="16" y="417.5" width="382" height="444.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8D-RC-Kzy">
-                                <rect key="frame" x="16" y="60" width="40" height="40"/>
+                                <rect key="frame" x="16" y="60" width="24" height="24"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="I5U-91-Ks5"/>
-                                    <constraint firstAttribute="width" constant="40" id="ZLG-3A-icc"/>
+                                    <constraint firstAttribute="height" constant="24" id="I5U-91-Ks5"/>
+                                    <constraint firstAttribute="width" constant="24" id="ZLG-3A-icc"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal">
-                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="large"/>
+                                    <imageReference key="image" image="icons8-down-48" symbolScale="large"/>
                                 </state>
                                 <connections>
                                     <action selector="dismisVC:" destination="XSe-aG-Kaw" eventType="touchUpInside" id="iLu-v9-5zd"/>
@@ -261,9 +261,7 @@
                                                     <constraint firstAttribute="height" constant="48" id="42G-OM-Gx1"/>
                                                     <constraint firstAttribute="width" secondItem="nLY-Mb-Zla" secondAttribute="height" multiplier="1:1" id="EwB-Oi-92u"/>
                                                 </constraints>
-                                                <state key="normal">
-                                                    <imageReference key="image" image="icons8-replay-5-96" symbolScale="large"/>
-                                                </state>
+                                                <state key="normal" image="icons8-replay-5-96"/>
                                                 <connections>
                                                     <action selector="backFive:" destination="XSe-aG-Kaw" eventType="touchUpInside" id="xyn-Ky-tHX"/>
                                                 </connections>
@@ -312,9 +310,13 @@
                                     <constraint firstItem="K7f-ef-tdF" firstAttribute="leading" secondItem="F5d-lj-3aQ" secondAttribute="leading" constant="8" id="yd4-al-Nic"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sq-tp-mwF">
-                                <rect key="frame" x="352" y="60" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sq-tp-mwF">
+                                <rect key="frame" x="358" y="52" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="4Sq-tp-mwF" secondAttribute="height" multiplier="1:1" id="2MS-Mo-EoK"/>
+                                    <constraint firstAttribute="height" constant="40" id="3Dk-J0-4bf"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="icons8-list-48"/>
                                 <connections>
                                     <action selector="showStepVCAction:" destination="XSe-aG-Kaw" eventType="touchUpInside" id="7pB-VM-Vy3"/>
                                 </connections>
@@ -325,16 +327,16 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="h5V-Lx-dkw" firstAttribute="centerX" secondItem="eeP-l1-Ghk" secondAttribute="centerX" id="2yY-YH-6kr"/>
-                            <constraint firstItem="iHy-kz-oxv" firstAttribute="bottom" secondItem="mor-Vg-vpM" secondAttribute="bottom" constant="16" id="8dw-9o-B7i"/>
+                            <constraint firstItem="iHy-kz-oxv" firstAttribute="bottom" secondItem="mor-Vg-vpM" secondAttribute="bottom" id="8dw-9o-B7i"/>
                             <constraint firstItem="h5V-Lx-dkw" firstAttribute="top" secondItem="iHy-kz-oxv" secondAttribute="top" constant="16" id="919-Ve-oDF"/>
                             <constraint firstItem="iHy-kz-oxv" firstAttribute="trailing" secondItem="mor-Vg-vpM" secondAttribute="trailing" constant="16" id="CJU-P6-V4b"/>
-                            <constraint firstItem="4Sq-tp-mwF" firstAttribute="top" secondItem="iHy-kz-oxv" secondAttribute="top" constant="16" id="GbP-Cr-skZ"/>
+                            <constraint firstItem="4Sq-tp-mwF" firstAttribute="top" secondItem="iHy-kz-oxv" secondAttribute="top" constant="8" id="GbP-Cr-skZ"/>
                             <constraint firstItem="mor-Vg-vpM" firstAttribute="leading" secondItem="iHy-kz-oxv" secondAttribute="leading" constant="16" id="K7d-3t-XHh"/>
-                            <constraint firstItem="4Sq-tp-mwF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="h5V-Lx-dkw" secondAttribute="trailing" constant="8" symbolic="YES" id="MBq-BE-7XD"/>
+                            <constraint firstItem="4Sq-tp-mwF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="h5V-Lx-dkw" secondAttribute="trailing" constant="8" symbolic="YES" id="Z08-Xm-jY7"/>
                             <constraint firstItem="y8D-RC-Kzy" firstAttribute="top" secondItem="iHy-kz-oxv" secondAttribute="top" constant="16" id="a8y-8v-x0K"/>
                             <constraint firstItem="jAb-aj-U8M" firstAttribute="top" secondItem="h5V-Lx-dkw" secondAttribute="bottom" constant="8" id="aYK-88-WlY"/>
                             <constraint firstItem="iHy-kz-oxv" firstAttribute="trailing" secondItem="F5d-lj-3aQ" secondAttribute="trailing" id="ezj-0m-GLy"/>
-                            <constraint firstItem="mor-Vg-vpM" firstAttribute="top" secondItem="F5d-lj-3aQ" secondAttribute="bottom" constant="16" id="gNr-LC-rGX"/>
+                            <constraint firstItem="mor-Vg-vpM" firstAttribute="top" secondItem="F5d-lj-3aQ" secondAttribute="bottom" constant="8" id="gNr-LC-rGX"/>
                             <constraint firstItem="y8D-RC-Kzy" firstAttribute="leading" secondItem="iHy-kz-oxv" secondAttribute="leading" constant="16" id="iyb-Bg-cNS"/>
                             <constraint firstItem="iHy-kz-oxv" firstAttribute="trailing" secondItem="4Sq-tp-mwF" secondAttribute="trailing" constant="16" id="oSf-kT-4E9"/>
                             <constraint firstItem="F5d-lj-3aQ" firstAttribute="leading" secondItem="iHy-kz-oxv" secondAttribute="leading" id="rwP-wE-yb7"/>
@@ -410,14 +412,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LuO-lX-wDV">
-                                <rect key="frame" x="16" y="60" width="40" height="40"/>
+                                <rect key="frame" x="16" y="60" width="24" height="24"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="HF1-m1-yvv"/>
-                                    <constraint firstAttribute="height" constant="40" id="uiV-Lh-TTa"/>
+                                    <constraint firstAttribute="width" constant="24" id="HF1-m1-yvv"/>
+                                    <constraint firstAttribute="height" constant="24" id="uiV-Lh-TTa"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal">
-                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="large"/>
+                                    <imageReference key="image" image="icons8-down-48" symbolScale="large"/>
                                 </state>
                                 <connections>
                                     <action selector="dismisVC:" destination="XSe-aG-Kaw" eventType="touchUpInside" id="bcS-qn-72G"/>
@@ -467,8 +469,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="chevron.down" catalog="system" width="128" height="72"/>
+        <image name="icons8-down-48" width="48" height="48"/>
         <image name="icons8-forward-5-96" width="96" height="96"/>
+        <image name="icons8-list-48" width="48" height="48"/>
         <image name="icons8-menu-vertical-60" width="60" height="60"/>
         <image name="icons8-play-60" width="60" height="60"/>
         <image name="icons8-play-64" width="64" height="64"/>
