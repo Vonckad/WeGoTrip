@@ -38,7 +38,7 @@ class MainViewController: UIViewController {
     //MARK: - setup UI
     func setupPlayer(currentIndex: Int) {
         mainTitleLabel.text = excursionModel.step[currentIndex].title
-        mainProgressView.setProgress(0.0, animated: false)
+        mainProgressView.progress = -0.5
         testButton.setAttributedTitle(NSAttributedString(string: excursionModel.step[currentIndex].title), for: .normal)
         
         let urlSound = URL(fileURLWithPath: Bundle.main.path(forResource: excursionModel.step[currentIndex].sound, ofType: "mp3")!)
